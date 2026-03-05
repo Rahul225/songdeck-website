@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — SongDeck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0C0C10;
+      --bg2: #111116;
+      --surface: #16161C;
+      --border: #1E1E28;
+      --purple: #B026FF;
+      --pink: #FF007F;
+      --text: #F0EEF8;
+      --muted: #6B6880;
+      --subtle: #2A2835;
+      --grad: linear-gradient(135deg, #B026FF, #FF007F);
+      --grad-text: linear-gradient(90deg, #B026FF, #FF007F);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .blob { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+    .blob-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(176,38,255,0.1), transparent 70%); top: -100px; right: -100px; }
+    .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,0,127,0.08), transparent 70%); bottom: 10%; left: -100px; }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(12,12,16,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-wordmark { display: flex; align-items: baseline; gap: 1px; }
+    .nav-wordmark-song { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 20px; color: #FFFFFF; letter-spacing: -0.5px; }
+    .nav-wordmark-deck { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #7C6FE0; letter-spacing: -0.5px; }
+    .nav-back { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-back:hover { color: var(--text); }
+
+    /* Layout */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 140px 48px 100px;
+    }
+
+    /* Header */
+    .page-header { margin-bottom: 64px; }
+    .page-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--purple); margin-bottom: 16px; }
+    .page-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(36px, 5vw, 56px); line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 16px; }
+    .page-sub { font-size: 16px; color: var(--muted); font-weight: 300; max-width: 480px; }
+
+    .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+    /* Two column layout */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* Social / direct contact cards */
+    .contact-channels { display: flex; flex-direction: column; gap: 16px; }
+
+    .channel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .channel-card:hover { border-color: rgba(176,38,255,0.4); transform: translateX(6px); }
+
+    .channel-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 22px;
+    }
+    .channel-icon.email { background: rgba(176,38,255,0.12); }
+    .channel-icon.twitter { background: rgba(29,161,242,0.12); }
+    .channel-icon.instagram { background: rgba(255,100,80,0.12); }
+
+    .channel-info { flex: 1; }
+    .channel-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .channel-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--text); }
+    .channel-desc { font-size: 12px; color: var(--muted); margin-top: 3px; font-weight: 300; }
+
+    .channel-arrow { color: var(--muted); font-size: 18px; transition: color 0.2s; }
+    .channel-card:hover .channel-arrow { color: var(--purple); }
+
+    /* Response time note */
+    .response-note {
+      background: rgba(176,38,255,0.06);
+      border: 1px solid rgba(176,38,255,0.15);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 8px;
+    }
+    .response-note strong { color: #C96BFF; font-weight: 600; }
+
+    /* Contact form */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px;
+    }
+
+    .form-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .form-subtitle { font-size: 13px; color: var(--muted); font-weight: 300; margin-bottom: 28px; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: rgba(176,38,255,0.5); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6880' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; cursor: pointer; }
+    .form-select option { background: #16161C; }
+
+    .form-btn {
+      width: 100%;
+      background: var(--grad);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      margin-top: 4px;
+    }
+    .form-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* Success state */
+    .form-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      gap: 16px;
+    }
+    .form-success.visible { display: flex; }
+    .form-success-icon { font-size: 48px; }
+    .form-success-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; color: var(--text); }
+    .form-success-sub { font-size: 14px; color: var(--muted); font-weight: 300; }
+    .form-body.hidden { display: none; }
+
+    /* FAQ section */
+    .faq-section { margin-top: 80px; }
+    .faq-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: -0.5px; margin-bottom: 32px; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .faq-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: border-color 0.2s; }
+    .faq-card:hover { border-color: rgba(176,38,255,0.3); }
+    .faq-q { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 10px; }
+    .faq-a { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-wordmark { display: flex; align-items: baseline; gap: 1px; }
+    .footer-wordmark-song { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 16px; color: #FFFFFF; }
+    .footer-wordmark-deck { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; color: #7C6FE0; }
+    .footer-copy { color: var(--muted); font-size: 12px; }
+    .footer-link { color: var(--muted); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+    .footer-link:hover { color: var(--text); }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .page-wrapper { padding: 120px 24px 80px; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="-10 -10 210 190" fill="none">
+        <defs>
+          <linearGradient id="navGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#B026FF"/>
+            <stop offset="100%" stop-color="#FF007F"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 0H110C154.183 0 190 35.8172 190 80V90C190 134.183 154.183 170 110 170H0V0Z" stroke="url(#navGrad)" stroke-width="18" stroke-linejoin="round" fill="none"/>
+        <path d="M40 45H110" stroke="url(#navGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M0 85H150" stroke="url(#navGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M80 125H0" stroke="url(#navGrad)" stroke-width="18" stroke-linecap="round"/>
+      </svg>
+      <div class="nav-wordmark">
+        <span class="nav-wordmark-song">Song</span><span class="nav-wordmark-deck">Deck</span>
+      </div>
+    </a>
+    <a href="index.html" class="nav-back">← Back to Home</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-label">Get in Touch</div>
+      <h1 class="page-title">Contact Us</h1>
+      <p class="page-sub">Have a question, bug report, or just want to say hi? We'd love to hear from you.</p>
+    </div>
+
+    <!-- Main grid -->
+    <div class="contact-grid">
+
+      <!-- Left: channels -->
+      <div>
+        <div class="contact-channels">
+
+          <a href="mailto:SongDeckApp@gmail.com" class="channel-card">
+            <div class="channel-icon email">📧</div>
+            <div class="channel-info">
+              <div class="channel-label">Email</div>
+              <div class="channel-value">SongDeckApp@gmail.com</div>
+              <div class="channel-desc">For support, feedback & privacy requests</div>
+            </div>
+            <div class="channel-arrow">→</div>
+          </a>
+
+          <a href="https://twitter.com/SongDeckApp" target="_blank" rel="noopener" class="channel-card">
+            <div class="channel-icon twitter">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#1DA1F2"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </div>
+            <div class="channel-info">
+              <div class="channel-label">Twitter / X</div>
+              <div class="channel-value">@SongDeckApp</div>
+              <div class="channel-desc">Updates, announcements & quick replies</div>
+            </div>
+            <div class="channel-arrow">→</div>
+          </a>
+
+          <a href="https://instagram.com/songdeckapp" target="_blank" rel="noopener" class="channel-card">
+            <div class="channel-icon instagram">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="url(#igGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="igGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f09433"/>
+                    <stop offset="25%" stop-color="#e6683c"/>
+                    <stop offset="50%" stop-color="#dc2743"/>
+                    <stop offset="75%" stop-color="#cc2366"/>
+                    <stop offset="100%" stop-color="#bc1888"/>
+                  </linearGradient>
+                </defs>
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="#dc2743" stroke="none"/>
+              </svg>
+            </div>
+            <div class="channel-info">
+              <div class="channel-label">Instagram</div>
+              <div class="channel-value">@songdeckapp</div>
+              <div class="channel-desc">Behind the scenes & community</div>
+            </div>
+            <div class="channel-arrow">→</div>
+          </a>
+
+        </div>
+
+        <div class="response-note" style="margin-top: 20px;">
+          ⏱ We typically respond within <strong>7 business days.</strong> For urgent issues, email is the fastest way to reach us.
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="form-card">
+        <div class="form-body" id="form-body">
+          <div class="form-title">Send a Message</div>
+          <div class="form-subtitle">We read every message and reply personally.</div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-name">Your Name</label>
+            <input class="form-input" type="text" id="contact-name" placeholder="Rahul Ekka" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-email">Email Address</label>
+            <input class="form-input" type="email" id="contact-email" placeholder="you@example.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-type">Topic</label>
+            <select class="form-select" id="contact-type">
+              <option value="">Select a topic...</option>
+              <option value="support">App Support / Bug Report</option>
+              <option value="feature">Feature Request</option>
+              <option value="account">Account / Billing</option>
+              <option value="privacy">Privacy / Data Request</option>
+              <option value="band">Band Collaboration</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-message">Message</label>
+            <textarea class="form-textarea" id="contact-message" placeholder="Tell us what's on your mind..."></textarea>
+          </div>
+
+          <button class="form-btn" onclick="submitContact()">Send Message →</button>
+        </div>
+
+        <div class="form-success" id="form-success">
+          <div class="form-success-icon">🎸</div>
+          <div class="form-success-title">Message sent!</div>
+          <div class="form-success-sub">Thanks for reaching out. We'll get back to you within 7 business days.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+      <div class="divider"></div>
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-grid">
+        <div class="faq-card">
+          <div class="faq-q">When will SongDeck launch on Android?</div>
+          <div class="faq-a">We're working hard on it. Join the waitlist on our homepage and you'll be the first to know the moment it goes live.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q">Is the Pro upgrade a one-time payment?</div>
+          <div class="faq-a">Yes — ₹349 once, yours forever. No subscriptions, no recurring fees. Your Pro access follows your account across all platforms.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q">Does SongDeck work without internet?</div>
+          <div class="faq-a">Fully. Your songs are stored on your device first. SongDeck syncs to the cloud when you're online, but works completely offline.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q">How do I add my band members?</div>
+          <div class="faq-a">Create a band in the app and share the 6-character invite code with your bandmates. They join instantly by entering the code.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q">Can I delete my account and data?</div>
+          <div class="faq-a">Yes. You can request account deletion at any time by emailing us. We'll delete all your data within 30 days.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q">What instruments does SongDeck support?</div>
+          <div class="faq-a">Currently Guitar and Keys, with full transpose and capo support. More instrument types are planned for future updates.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <svg width="24" height="24" viewBox="-10 -10 210 190" fill="none">
+        <defs>
+          <linearGradient id="fGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#B026FF"/>
+            <stop offset="100%" stop-color="#FF007F"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 0H110C154.183 0 190 35.8172 190 80V90C190 134.183 154.183 170 110 170H0V0Z" stroke="url(#fGrad)" stroke-width="18" stroke-linejoin="round" fill="none"/>
+        <path d="M40 45H110" stroke="url(#fGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M0 85H150" stroke="url(#fGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M80 125H0" stroke="url(#fGrad)" stroke-width="18" stroke-linecap="round"/>
+      </svg>
+      <div class="footer-wordmark">
+        <span class="footer-wordmark-song">Song</span><span class="footer-wordmark-deck">Deck</span>
+      </div>
+    </div>
+    <a href="index.html" class="footer-link">← Back to Home</a>
+    <div class="footer-copy">© 2025 SongDeck by Rahul Saj Ekka</div>
+  </footer>
+
+  <script>
+    // Contact form — wired to Formspree (replace YOUR_FORM_ID with your Formspree endpoint)
+    async function submitContact() {
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const type = document.getElementById('contact-type').value;
+      const message = document.getElementById('contact-message').value.trim();
+
+      // Basic validation
+      if (!name || !email || !email.includes('@') || !message) {
+        const missing = [
+          !name && 'contact-name',
+          !email && 'contact-email',
+          !message && 'contact-message'
+        ].filter(Boolean);
+        missing.forEach(id => {
+          const el = document.getElementById(id);
+          el.style.borderColor = '#FF007F';
+          setTimeout(() => el.style.borderColor = '', 1500);
+        });
+        return;
+      }
+
+      // Submit to Formspree
+      // 1. Go to formspree.io and create a free account
+      // 2. Create a new form — it gives you an endpoint like https://formspree.io/f/xyzabcde
+      // 3. Replace the URL below with your endpoint
+      const FORMSPREE_URL = 'https://formspree.io/f/xzdjpykz';
+
+      try {
+        const res = await fetch(FORMSPREE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, email, topic: type, message })
+        });
+
+        if (res.ok) {
+          document.getElementById('form-body').classList.add('hidden');
+          document.getElementById('form-success').classList.add('visible');
+        } else {
+          throw new Error('Failed');
+        }
+      } catch {
+        // Fallback — open mail client if Formspree not set up yet
+        window.location.href = `mailto:SongDeckApp@gmail.com?subject=SongDeck: ${type || 'Message'}&body=From: ${name} (${email})%0A%0A${message}`;
+      }
+    }
+
+    // Enter key on textarea submits
+    document.getElementById('contact-message').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.ctrlKey) submitContact();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — SongDeck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0C0C10;
+      --bg2: #111116;
+      --surface: #16161C;
+      --border: #1E1E28;
+      --purple: #B026FF;
+      --pink: #FF007F;
+      --text: #F0EEF8;
+      --muted: #6B6880;
+      --grad: linear-gradient(135deg, #B026FF, #FF007F);
+      --grad-text: linear-gradient(90deg, #B026FF, #FF007F);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(12,12,16,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo-icon { width: 32px; height: 32px; }
+    .nav-wordmark { display: flex; align-items: baseline; gap: 1px; }
+    .nav-wordmark-song { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 20px; color: #FFFFFF; letter-spacing: -0.5px; }
+    .nav-wordmark-deck { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #7C6FE0; letter-spacing: -0.5px; }
+    .nav-back { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+    .nav-back:hover { color: var(--text); }
+
+    /* Page content */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 140px 48px 100px;
+    }
+
+    /* Header */
+    .page-header { margin-bottom: 64px; }
+    .page-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--purple); margin-bottom: 16px;
+    }
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+    .page-meta { font-size: 14px; color: var(--muted); font-weight: 300; }
+    .page-meta span { color: var(--text); font-weight: 500; }
+
+    .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+    /* Sections */
+    .policy-section { margin-bottom: 48px; }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-left: 16px;
+      border-left: 3px solid;
+      border-image: var(--grad) 1;
+    }
+
+    p {
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    p strong { color: var(--text); font-weight: 500; }
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-left: 4px;
+    }
+
+    ul li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 300;
+    }
+
+    ul li::before {
+      content: '→';
+      color: var(--purple);
+      font-size: 14px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      background: rgba(176,38,255,0.06);
+      border: 1px solid rgba(176,38,255,0.2);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 14px;
+    }
+    .highlight-box p { margin-bottom: 0; }
+
+    /* Contact box */
+    .contact-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-top: 16px;
+    }
+    .contact-box p { margin-bottom: 6px; }
+    .contact-box a {
+      color: #C96BFF;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+    .contact-box a:hover { color: var(--pink); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-wordmark { display: flex; align-items: baseline; gap: 1px; }
+    .footer-wordmark-song { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 16px; color: #FFFFFF; }
+    .footer-wordmark-deck { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; color: #7C6FE0; }
+    .footer-copy { color: var(--muted); font-size: 12px; }
+    .footer-link { color: var(--muted); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+    .footer-link:hover { color: var(--text); }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .page-wrapper { padding: 120px 24px 80px; }
+      footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="-10 -10 210 190" fill="none">
+        <defs>
+          <linearGradient id="navGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#B026FF"/>
+            <stop offset="100%" stop-color="#FF007F"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 0H110C154.183 0 190 35.8172 190 80V90C190 134.183 154.183 170 110 170H0V0Z" stroke="url(#navGrad)" stroke-width="18" stroke-linejoin="round" fill="none"/>
+        <path d="M40 45H110" stroke="url(#navGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M0 85H150" stroke="url(#navGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M80 125H0" stroke="url(#navGrad)" stroke-width="18" stroke-linecap="round"/>
+      </svg>
+      <div class="nav-wordmark">
+        <span class="nav-wordmark-song">Song</span><span class="nav-wordmark-deck">Deck</span>
+      </div>
+    </a>
+    <a href="index.html" class="nav-back">← Back to Home</a>
+  </nav>
+
+  <!-- Content -->
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <div class="page-label">Legal</div>
+      <h1 class="page-title">Terms of Service</h1>
+      <p class="page-meta">
+        Last updated: <span>June 2025</span> &nbsp;·&nbsp;
+        Effective date: <span>June 2025</span>
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="policy-section">
+      <div class="highlight-box">
+        <p>Please read these Terms of Service carefully before using SongDeck. By downloading, installing, or using the app, you agree to be bound by these terms. If you do not agree, do not use SongDeck.</p>
+      </div>
+    </div>
+
+    <div class="policy-section">
+      <h2>1. Acceptance of Terms</h2>
+      <p>These Terms of Service ("Terms") constitute a legal agreement between you and <strong>SongDeck by Rahul Saj Ekka</strong> ("we", "us", or "our") governing your use of the SongDeck mobile application and website (the "Service"). By accessing or using the Service, you confirm that you are at least 13 years of age and agree to these Terms.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>2. Description of Service</h2>
+      <p>SongDeck is a musician productivity application that allows users to:</p>
+      <ul>
+        <li>Create and manage a personal song library with chords, lyrics, and metadata</li>
+        <li>Build and manage setlists for live performances</li>
+        <li>Transpose songs across all 12 keys in real time</li>
+        <li>Create or join bands and collaborate with other musicians</li>
+        <li>Sync content across devices via cloud storage</li>
+      </ul>
+      <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time with reasonable notice.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>3. User Accounts</h2>
+      <p>To access certain features of SongDeck, you must create an account using a valid email address. You are responsible for:</p>
+      <ul>
+        <li>Maintaining the confidentiality of your account credentials</li>
+        <li>All activity that occurs under your account</li>
+        <li>Notifying us immediately of any unauthorised use of your account</li>
+        <li>Ensuring the information you provide is accurate and up to date</li>
+      </ul>
+      <p>We reserve the right to suspend or terminate accounts that violate these Terms.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>4. Free and Pro Tiers</h2>
+      <p>SongDeck offers two tiers of access:</p>
+      <p><strong>Free Tier</strong> — Available to all users at no cost, including up to 10 songs, up to 2 setlists, and core performance features.</p>
+      <p><strong>Pro Tier</strong> — A one-time purchase that unlocks unlimited songs, unlimited setlists, band collaboration, and all future Pro features. Pro access is tied to your account and available across all platforms where SongDeck is offered.</p>
+      <p>All purchases are final and non-refundable except where required by applicable law. Pricing is displayed in the app and on the website at the time of purchase.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>5. Your Content</h2>
+      <p>You retain full ownership of all content you create in SongDeck — your songs, lyrics, chords, and setlists belong to you.</p>
+      <p>By using the Service, you grant us a limited, non-exclusive licence to store, process, and display your content solely for the purpose of providing the Service to you. We do not claim ownership of your content and will never use it for advertising or share it with third parties without your consent.</p>
+      <p>You are responsible for ensuring that the content you enter does not infringe the intellectual property rights of others. We are not liable for any copyright infringement resulting from content you create within the app.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>6. Band Collaboration</h2>
+      <p>When you create a band and share content with members:</p>
+      <ul>
+        <li>Band members can view songs and setlists you share with them</li>
+        <li>As band creator, you control who can edit or lock shared content</li>
+        <li>You are responsible for the invite codes you share and who you allow to join your band</li>
+        <li>We are not responsible for disputes between band members regarding shared content</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>7. Acceptable Use</h2>
+      <p>You agree not to use SongDeck to:</p>
+      <ul>
+        <li>Violate any applicable laws or regulations</li>
+        <li>Upload or transmit harmful, offensive, or illegal content</li>
+        <li>Attempt to gain unauthorised access to our systems or other users' accounts</li>
+        <li>Reverse engineer, decompile, or attempt to extract the source code of the app</li>
+        <li>Use the Service in any way that could damage, disable, or impair it</li>
+        <li>Resell, sublicense, or commercially exploit the Service without our written permission</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>8. Intellectual Property</h2>
+      <p>The SongDeck name, logo, app design, and all underlying technology are the intellectual property of SongDeck by Rahul Saj Ekka. You may not copy, modify, distribute, or create derivative works based on our intellectual property without explicit written permission.</p>
+      <p>Nothing in these Terms transfers any ownership of our intellectual property to you.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>9. Disclaimer of Warranties</h2>
+      <p>SongDeck is provided <strong>"as is"</strong> and <strong>"as available"</strong> without warranties of any kind, either express or implied. We do not warrant that:</p>
+      <ul>
+        <li>The Service will be uninterrupted, error-free, or secure at all times</li>
+        <li>Any defects or errors will be corrected</li>
+        <li>The Service will meet your specific requirements</li>
+        <li>Data stored in the Service will never be lost</li>
+      </ul>
+      <p>We strongly recommend keeping local backups of any important song content.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>10. Limitation of Liability</h2>
+      <p>To the fullest extent permitted by applicable law, SongDeck by Rahul Saj Ekka shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of data, loss of revenue, or loss of goodwill, arising from your use of or inability to use the Service.</p>
+      <p>Our total liability to you for any claim arising from these Terms shall not exceed the amount you paid us in the 12 months preceding the claim, or ₹500 (whichever is greater).</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>11. Termination</h2>
+      <p>You may stop using SongDeck and delete your account at any time. We reserve the right to suspend or terminate your access to the Service at our discretion if you violate these Terms, without prior notice.</p>
+      <p>Upon termination, your right to use the Service ceases immediately. We will delete your data in accordance with our Privacy Policy.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>12. Governing Law</h2>
+      <p>These Terms are governed by and construed in accordance with the laws of <strong>India</strong>. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts located in India.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>13. Changes to These Terms</h2>
+      <p>We may update these Terms from time to time. When we make material changes, we will update the "Last updated" date at the top of this page and notify you via the app where appropriate. Your continued use of SongDeck after changes are posted constitutes your acceptance of the updated Terms.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>14. Contact Us</h2>
+      <p>If you have any questions about these Terms of Service, please contact us:</p>
+      <div class="contact-box">
+        <p><strong>SongDeck by Rahul Saj Ekka</strong></p>
+        <p>Email: <a href="mailto:Rseworks22@gmail.com">Rseworks22@gmail.com</a></p>
+        <p style="margin-top: 12px; font-size: 13px;">We aim to respond to all inquiries within <strong style="color: var(--text);">7 business days.</strong></p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p style="font-size: 13px; text-align: center;">© 2025 SongDeck by Rahul Saj Ekka. All rights reserved.</p>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <svg width="24" height="24" viewBox="-10 -10 210 190" fill="none">
+        <defs>
+          <linearGradient id="fGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#B026FF"/>
+            <stop offset="100%" stop-color="#FF007F"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 0H110C154.183 0 190 35.8172 190 80V90C190 134.183 154.183 170 110 170H0V0Z" stroke="url(#fGrad)" stroke-width="18" stroke-linejoin="round" fill="none"/>
+        <path d="M40 45H110" stroke="url(#fGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M0 85H150" stroke="url(#fGrad)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M80 125H0" stroke="url(#fGrad)" stroke-width="18" stroke-linecap="round"/>
+      </svg>
+      <div class="footer-wordmark">
+        <span class="footer-wordmark-song">Song</span><span class="footer-wordmark-deck">Deck</span>
+      </div>
+    </div>
+    <a href="index.html" class="footer-link">← Back to Home</a>
+    <div class="footer-copy">© 2025 SongDeck by Rahul Saj Ekka</div>
+  </footer>
+
+</body>
+</html>
